@@ -5,7 +5,7 @@
  */
 
 import axios from "axios";
-import config from "../config/app.config.js";
+import { config } from "../config/config.js";
 
 /**
  * POST /api/print/generate-sheet

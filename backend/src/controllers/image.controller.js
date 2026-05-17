@@ -11,7 +11,7 @@ import FormData from "form-data";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
-import config from "../config/app.config.js";
+import { config } from "../config/config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
