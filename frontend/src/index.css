@@ -150,14 +150,14 @@ button { font-family: var(--font-family); cursor: pointer; border: none; backgro
 .badge-amber { background: #fef3c7; color: #b45309; }
 
 .section-title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: var(--space-xs);
 }
 
 .section-subtitle {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
 }

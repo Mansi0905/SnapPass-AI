@@ -2,6 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
 
+import {
+  Upload,
+  Sparkles,
+  Settings2,
+  Download,
+} from "lucide-react";
+
 /**
  * HomePage — landing page with hero section and feature highlights.
  */
@@ -14,10 +21,10 @@ function HomePage() {
   ];
 
   const steps = [
-    { num: '01', label: 'Upload your photo' },
-    { num: '02', label: 'AI processes & centers' },
-    { num: '03', label: 'Choose size & quantity' },
-    { num: '04', label: 'Download & print' },
+    { label: 'Upload your photo' ,icon:<Upload size={22}/>, subtitle:'Choose a photo from your device'},
+    { label: 'AI processes & centers' ,icon:<Sparkles size={22}/>, subtitle:'Advanced AI optimization for your photo'},
+    { label: 'Choose size & quantity' ,icon:<Settings2 size={22}/>, subtitle: 'Select your required photo format and copies'},
+    { label: 'Download & print' ,icon:<Download size={22}/>,subtitle:'Get a high-quality print-ready photo instantly'},
   ];
 
   const chips = [
@@ -187,10 +194,13 @@ function HomePage() {
         <h2 id="steps-title" className="section-title text-center">How It Works</h2>
         <p className="section-subtitle text-center">Four simple steps to a print-ready sheet</p>
         <div className="steps-grid">
-          {steps.map(({ num, label }) => (
-            <div key={num} className="step-card">
-              <span className="step-card__num">{num}</span>
-              <p className="step-card__label">{label}</p>
+          {steps.map(({label ,icon, subtitle}) => (
+            <div key={label} className="step-card">
+              <span className="step-card__icon">{icon}</span>
+              <div className="step-card__content">
+                <p className="step-card__label">{label}</p>
+                <p className="step-card__subtitle">{subtitle}</p>
+              </div>
             </div>
           ))}
         </div>
