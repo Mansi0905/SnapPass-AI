@@ -57,17 +57,15 @@ Creates a new user account, logs them in, and issues a JWT cookie.
 *Note: The password must be 8-32 characters, contain at least one uppercase letter, one lowercase letter, one number, one special character, and no spaces.*
 
 **Success Response (201 Created):**
-- **Set-Cookie Header:** `jwt=...; HttpOnly; SameSite=...`
+- **Set-Cookie Header:** `token=...; HttpOnly; SameSite=...`
 ```json
 {
-  "status": "success",
+  "success": true,
   "message": "User registered successfully",
   "data": {
-    "user": {
-      "id": "60d0fe4f5311236168a109ca",
-      "fullName": "Jane Doe",
-      "email": "jane@example.com"
-    }
+    "id": "60d0fe4f5311236168a109ca",
+    "fullName": "Jane Doe",
+    "email": "jane@example.com"
   }
 }
 ```
