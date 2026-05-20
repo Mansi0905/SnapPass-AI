@@ -5,6 +5,7 @@ import PrintButton from '../components/PrintButton';
 import './PrintPreviewPage.css';
 import EmptyState from '../components/EmptyState';
 import { motion } from 'framer-motion';
+import { generateSheet } from '../services/photoService';
 
 /**
  * PrintPreviewPage — Step 3 & 4.
@@ -19,20 +20,24 @@ function PrintPreviewPage() {
 
   const handleGenerateSheet = async () => {
     setIsGenerating(true);
+    try {
+      const blob = await generateSheet({
+        filename: state.filename,
+        quantity,
+        photoSizePreset: state.sizePreset,
+      });
 
-    // TODO: POST /api/print/generate-sheet { filename, quantity, photoSizePreset }
-    // const res = await fetch('/api/print/generate-sheet', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ filename: state.filename, quantity, photoSizePreset: state.sizePreset }),
-    // });
-    // const blob = await res.blob();
-    // const url = URL.createObjectURL(blob);
-    // const a = document.createElement('a'); a.href = url; a.download = 'snappass_sheet.png'; a.click();
-
-    await new Promise((r) => setTimeout(r, 1200));
-    setIsGenerating(false);
-    alert('Sheet generation coming soon! Connect python-ai-service to complete this step.');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `snappass_sheet_${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(error.message || 'Sheet generation failed.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   // Build grid of photo slots

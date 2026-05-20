@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PhotoPreview from '../components/PhotoPreview';
 import BackgroundSelector from '../components/BackgroundSelector';
@@ -7,6 +7,8 @@ import { ButtonSpinner } from '../components/LoadingSpinner';
 import './EditorPage.css';
 import EmptyState from '../components/EmptyState';
 import { motion } from 'framer-motion';
+import useImageProcessor from '../hooks/useImageProcessor';
+import usePhotoUpload from '../hooks/usePhotoUpload';
 
 /**
  * EditorPage — Step 2.
@@ -27,7 +29,13 @@ function EditorPage() {
 
   const [background, setBackground] = useState('white');
   const [sizePreset, setSizePreset] = useState('35x45');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const { processImage, processedUrl, isProcessing, error: processError } = useImageProcessor();
+  const {
+    uploadFile,
+    uploadedFile,
+    isUploading: isUploadingPhoto,
+    error: uploadError,
+  } = usePhotoUpload();
 
   const iconMap = {
     refresh: (
@@ -49,23 +57,22 @@ function EditorPage() {
     const file = event.target.files[0];
 
     if (!file) return;
-
-    const newLocalUrl = URL.createObjectURL(file);
-
-    setPhotoData({
-      localUrl: newLocalUrl,
-      filename: file.name,
-      fileSize: file.size,
-    });
+    uploadFile(file).catch(() => {});
   };
+
+  useEffect(() => {
+    if (uploadedFile) {
+      setPhotoData({
+        localUrl: uploadedFile.localUrl,
+        filename: uploadedFile.filename,
+        fileSize: uploadedFile.size ?? photoData.fileSize,
+      });
+    }
+  }, [uploadedFile]);
 
 
   const handleProcess = async () => {
-    setIsProcessing(true);
-
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5005/api';
-      
       const backgroundHex = {
         'white': '#ffffff',
         'off-white': '#f5f0e8',
@@ -73,36 +80,22 @@ function EditorPage() {
         'light-blue': '#bfdbfe',
         'light-red': '#fecaca'
       }[background] || '#ffffff';
-
-      const res = await fetch(`${apiUrl}/process`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename: photoData.filename,
-          backgroundColour: backgroundHex,
-          photoSizePreset: sizePreset,
-        }),
+      const nextProcessedUrl = await processImage({
+        filename: photoData.filename,
+        backgroundColour: backgroundHex,
+        photoSizePreset: sizePreset,
       });
-
-      if (!res.ok) {
-        throw new Error('AI processing failed');
-      }
-
-      const blob = await res.blob();
-      const processedUrl = URL.createObjectURL(blob);
-
-      setIsProcessing(false);
 
       navigate('/print-preview', {
         state: {
-          processedUrl,
+          processedUrl: nextProcessedUrl,
+          filename: photoData.filename,
           background,
           sizePreset,
         },
       });
     } catch (error) {
       console.error('Processing error:', error);
-      setIsProcessing(false);
       alert('Failed to process image. Please check if backend services are running.');
     }
   };
@@ -155,7 +148,7 @@ function EditorPage() {
         >
           <PhotoPreview
             originalUrl={photoData.localUrl}
-            processedUrl={null}
+            processedUrl={processedUrl}
             isProcessing={isProcessing}
           />
         </motion.section>
@@ -198,6 +191,7 @@ function EditorPage() {
           <button
             className="btn editor-page__replace-btn"
             onClick={() => fileInputRef.current.click()}
+            disabled={isUploadingPhoto}
           >
             <span className="editor-page__btn-icon" aria-hidden="true">
               {iconMap.refresh}
@@ -208,7 +202,7 @@ function EditorPage() {
           <button
             className="btn btn-primary editor-page__process-btn"
             onClick={handleProcess}
-            disabled={isProcessing}
+            disabled={isProcessing || isUploadingPhoto}
           >
             {isProcessing ? (
               <>
@@ -223,6 +217,20 @@ function EditorPage() {
               </>
             )}
           </button>
+
+          {processError ? (
+            <p className="editor-info-row">
+              <span className="editor-info-label">Error</span>
+              <span className="editor-info-value">{processError}</span>
+            </p>
+          ) : null}
+
+          {uploadError ? (
+            <p className="editor-info-row">
+              <span className="editor-info-label">Error</span>
+              <span className="editor-info-value">{uploadError}</span>
+            </p>
+          ) : null}
         </motion.aside>
       </div>
     </div>
