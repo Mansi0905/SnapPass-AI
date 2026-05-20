@@ -66,9 +66,9 @@ function Footer() {
                 Privacy Policy
               </a>
 
-              <a href="#" className="footer__item">
+              <Link to="/terms" className="footer__item">
                 Terms & Conditions
-              </a>
+              </Link>
             </div>
 
             <div className="footer__column">
