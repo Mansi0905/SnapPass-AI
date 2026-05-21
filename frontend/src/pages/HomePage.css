@@ -4,12 +4,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3xl);
-  padding-bottom: var(--space-3xl);
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(37, 99, 235, 0.12), transparent 60%),
     radial-gradient(900px 500px at 90% 0%, rgba(14, 116, 144, 0.14), transparent 55%);
-  margin-top: -120px;
-  padding-top: 140px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .home-page::after {
@@ -28,11 +27,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2xl);
+
   padding: var(--space-3xl) var(--space-xl);
-  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
+  max-width: 1200px;
   z-index: 1;
 }
 
@@ -156,7 +155,10 @@
 
 /* Steps */
 .steps-section {
-  padding: 6rem 2rem;
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+  padding-bottom: var(--space-3xl);
+  padding-top: 0px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -173,14 +175,12 @@
   font-size: 2.75rem;
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 1rem 0;
   letter-spacing: -0.03em;
 }
 
 .section-subtitle {
   font-size: 1.25rem;
   color: #64748b;
-  margin: 0 0 5rem 0;
 }
 
 .steps-grid {
@@ -344,12 +344,14 @@
 }
 
 /* Features */
-/* Features */
 
 .features-section {
-  padding: 0 var(--space-xl);
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+  padding-bottom: var(--space-3xl);
+  padding-top: 0px;
 
-  max-width: 1500px;
+  max-width: 1200px;
 
   margin: 0 auto;
 
@@ -620,8 +622,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 5rem;
-  padding: 0 var(--space-xl);
+  
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+  padding-bottom: var(--space-3xl);
+  padding-top: 0px;
+
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
